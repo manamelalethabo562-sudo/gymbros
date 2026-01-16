@@ -3,26 +3,354 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GymBros — Login</title>
-  <script type="module" src="firebase.js" defer></script>
-  <script type="module" src="app.js" defer></script>
-
+  <title>GymBros — Minimal Futuristic Tracker</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="style.css">
-  
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: rgba(255, 255, 255, 0.92);
+      --text: #0f172a;
+      --text-muted: #475569;
+      --accent: #6366f1;
+      --accent-dark: #4f46e5;
+      --border: rgba(15, 23, 42, 0.08);
+      --glow: rgba(99, 102, 241, 0.12);
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+      background: var(--card);
+      backdrop-filter: blur(16px);
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.06), 0 0 0 1px rgba(99,102,241,0.05);
+      padding: 40px 28px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    h1 { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.6px; margin-bottom: 8px; }
+    h2 { font-size: 1.55rem; font-weight: 600; margin: 32px 0 16px; }
+
+    input, select {
+      width: 100%;
+      padding: 14px 16px;
+      margin: 10px 0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 1rem;
+      background: rgba(255,255,255,0.7);
+      transition: all 0.2s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--glow);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.22s;
+    }
+
+    button:hover { background: var(--accent-dark); transform: translateY(-1px); box-shadow: 0 8px 20px var(--glow); }
+
+    button.secondary {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    button.secondary:hover { background: rgba(99,102,241,0.07); }
+
+    .section { display: none; }
+    .active { display: block; }
+
+    .workout-log {
+      background: rgba(255,255,255,0.5);
+      border-radius: 16px;
+      padding: 16px;
+      margin: 16px 0;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+
+    .workout-log h3 { font-size: 1.15rem; margin-bottom: 8px; }
+    .workout-log p { color: var(--text-muted); font-size: 0.95rem; margin: 4px 0; }
+
+    #stats { font-size: 1.1rem; font-weight: 600; color: var(--accent); margin: 24px 0; }
+
+    #message { min-height: 20px; margin: 12px 0; }
+
+    .error { color: #ef4444; }
+    .success { color: #10b981; }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>GymBros</h1>
-    <p style="color:#64748b; margin:8px 0 32px;">No Pain. No Gain.</p>
 
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="password" placeholder="Password" required />
-    
-    <button id="main-btn">Sign In</button>
-    <button id="toggle-btn" class="secondary">Create account</button>
-    
-    <p id="message" style="margin-top:16px; min-height:20px; color:#ef4444;"></p>
+<div class="container" id="auth-container">
+  <h1>GymBros</h1>
+  <p style="color:#64748b; margin:8px 0 32px;">Stronger. Bigger. Your progress.</p>
+
+  <input type="email"    id="email"    placeholder="Email"    required />
+  <input type="password" id="password" placeholder="Password" required />
+  
+  <button id="main-btn">Sign In</button>
+  <button id="toggle-btn" class="secondary">Create account</button>
+  
+  <p id="auth-message" class="error"></p>
+</div>
+
+<div class="container section" id="dashboard-container">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <h1>GymFlow</h1>
+    <button id="logout" class="secondary" style="width:auto; padding:10px 18px;">Logout</button>
   </div>
+
+  <h2>Log Workout</h2>
+  <select id="exercise">
+    <option value="">Select exercise</option>
+    <option value="Squat">Squat</option>
+    <option value="Bench Press">Bench Press</option>
+    <option value="Deadlift">Deadlift</option>
+    <option value="Overhead Press">Overhead Press</option>
+    <option value="Pull-up">Pull-up</option>
+    <option value="Push-up">Push-up</option>
+    <option value="Row">Row</option>
+    <option value="Other">Other</option>
+  </select>
+
+  <input type="number" id="sets"   placeholder="Sets" min="1" />
+  <input type="number" id="reps"   placeholder="Reps" min="1" />
+  <input type="number" id="weight" placeholder="Weight (kg)" min="0" step="0.5" />
+  <input type="text"   id="notes"  placeholder="Notes (optional)" />
+
+  <button id="logBtn">Log Set</button>
+  <p id="log-message" class="message"></p>
+
+  <h2>Today's Activity</h2>
+  <p id="stats">Total volume: — kg</p>
+
+  <div id="workouts"></div>
+</div>
+
+<script type="module">
+// ────────────────────────────────────────────────
+// Firebase Config + Imports (v10 modular)
+// ────────────────────────────────────────────────
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { 
+  getAuth, 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  onAuthStateChanged, 
+  signOut 
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { 
+  getDatabase, ref, push, set, onValue, serverTimestamp 
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCLJfHk9jhYzHOdsbmkSF_QatlkrU9K8hE",
+  authDomain: "thegallery-9072c.firebaseapp.com",
+  projectId: "thegallery-9072c",
+  storageBucket: "thegallery-9072c.firebasestorage.app",
+  messagingSenderId: "410926780961",
+  appId: "1:410926780961:web:33db46e706ce26553bc960",
+  measurementId: "G-73E1P7JEXS",
+  databaseURL: "https://thegallery-9072c-default-rtdb.firebaseio.com/"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getDatabase(app);
+
+// ────────────────────────────────────────────────
+// DOM Elements
+// ────────────────────────────────────────────────
+const 
+  authContainer    = document.getElementById('auth-container'),
+  dashboardContainer = document.getElementById('dashboard-container'),
+  emailEl          = document.getElementById('email'),
+  passwordEl       = document.getElementById('password'),
+  mainBtn          = document.getElementById('main-btn'),
+  toggleBtn        = document.getElementById('toggle-btn'),
+  authMessage      = document.getElementById('auth-message'),
+  logBtn           = document.getElementById('logBtn'),
+  logMessage       = document.getElementById('log-message'),
+  exerciseEl       = document.getElementById('exercise'),
+  setsEl           = document.getElementById('sets'),
+  repsEl           = document.getElementById('reps'),
+  weightEl         = document.getElementById('weight'),
+  notesEl          = document.getElementById('notes'),
+  workoutsEl       = document.getElementById('workouts'),
+  statsEl          = document.getElementById('stats'),
+  logoutBtn        = document.getElementById('logout');
+
+let isLogin = true;
+
+// ────────────────────────────────────────────────
+// Auth UI Toggle
+// ────────────────────────────────────────────────
+toggleBtn.onclick = () => {
+  isLogin = !isLogin;
+  mainBtn.textContent = isLogin ? 'Sign In' : 'Sign Up';
+  toggleBtn.textContent = isLogin ? 'Create account' : 'Already have an account? Sign in';
+};
+
+// ────────────────────────────────────────────────
+// Auth Logic
+// ────────────────────────────────────────────────
+mainBtn.onclick = async () => {
+  const email = emailEl.value.trim();
+  const pass  = passwordEl.value;
+  authMessage.textContent = '';
+  authMessage.className = 'error';
+
+  if (!email || !pass) {
+    authMessage.textContent = 'Please fill email and password';
+    return;
+  }
+
+  try {
+    if (isLogin) {
+      await signInWithEmailAndPassword(auth, email, pass);
+    } else {
+      await createUserWithEmailAndPassword(auth, email, pass);
+    }
+    // onAuthStateChanged will handle redirect
+  } catch (err) {
+    authMessage.textContent = 
+      err.code?.includes('wrong-password') ? 'Incorrect password' :
+      err.code?.includes('user-not-found') ? 'No account found' :
+      err.message || 'Authentication failed';
+  }
+};
+
+// ────────────────────────────────────────────────
+// Route Protection + Real-time Data
+// ────────────────────────────────────────────────
+onAuthStateChanged(auth, user => {
+  if (user) {
+    authContainer.classList.remove('active');
+    dashboardContainer.classList.add('active');
+
+    const today = new Date().toISOString().split('T')[0];
+    const workoutsRef = ref(db, `users/${user.uid}/workouts`);
+
+    onValue(workoutsRef, snapshot => {
+      workoutsEl.innerHTML = '';
+      let totalVolume = 0;
+
+      if (!snapshot.exists()) {
+        workoutsEl.innerHTML = '<p style="color:#64748b;text-align:center;">No workouts logged yet</p>';
+        statsEl.textContent = 'Total volume today: 0 kg';
+        return;
+      }
+
+      const todayLogs = [];
+      snapshot.forEach(child => {
+        const data = child.val();
+        if (data.date === today) {
+          todayLogs.push(data);
+          totalVolume += (data.weight || 0) * (data.reps || 0) * (data.sets || 0);
+        }
+      });
+
+      statsEl.textContent = `Total volume today: ${totalVolume.toFixed(0)} kg`;
+
+      todayLogs.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+      todayLogs.forEach(log => {
+        const div = document.createElement('div');
+        div.className = 'workout-log';
+        div.innerHTML = `
+          <h3>${log.exercise}${log.notes ? ` — ${log.notes}` : ''}</h3>
+          <p>Sets: ${log.sets} × Reps: ${log.reps} @ ${log.weight || 0} kg</p>
+          <small style="color:#94a3b8;">
+            ${new Date(log.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}
+          </small>
+        `;
+        workoutsEl.appendChild(div);
+      });
+    });
+  } else {
+    dashboardContainer.classList.remove('active');
+    authContainer.classList.add('active');
+    authMessage.textContent = '';
+  }
+});
+
+// ────────────────────────────────────────────────
+// Log Workout
+// ────────────────────────────────────────────────
+logBtn.onclick = async () => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const exercise = exerciseEl.value.trim();
+  const sets     = Number(setsEl.value);
+  const reps     = Number(repsEl.value);
+  const weight   = Number(weightEl.value) || 0;
+  const notes    = notesEl.value.trim();
+
+  if (!exercise || !sets || !reps) {
+    logMessage.textContent = 'Please fill exercise, sets & reps';
+    logMessage.className = 'error';
+    return;
+  }
+
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    const newLogRef = push(ref(db, `users/${user.uid}/workouts`));
+
+    await set(newLogRef, {
+      exercise,
+      sets,
+      reps,
+      weight,
+      notes,
+      date: today,
+      timestamp: serverTimestamp()
+    });
+
+    logMessage.textContent = 'Workout logged successfully';
+    logMessage.className = 'success';
+
+    // Reset form
+    exerciseEl.value = setsEl.value = repsEl.value = weightEl.value = notesEl.value = '';
+    setTimeout(() => { logMessage.textContent = ''; logMessage.className = ''; }, 3000);
+  } catch (err) {
+    logMessage.textContent = 'Error logging workout';
+    logMessage.className = 'error';
+  }
+};
+
+// Logout
+logoutBtn.onclick = () => signOut(auth);
+</script>
 </body>
 </html>
