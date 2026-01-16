@@ -20,6 +20,7 @@
       --muted: #64748b;
       --success: #10b981;
       --error: #ef4444;
+      --spinner: #ffffff;
 
       --transition-fast:    all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
       --transition-medium:  all 0.44s cubic-bezier(0.16, 1, 0.3, 1);
@@ -41,6 +42,7 @@
       --muted: #94a3b8;
       --success: #34d399;
       --error: #f87171;
+      --spinner: #ffffff;
     }
 
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -66,15 +68,15 @@
       backdrop-filter: blur(16px);
       border-radius: 28px;
       border: 1px solid var(--border);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.10), 0 0 0 1px rgba(0,0,0,0.05);
-      padding: 32px 24px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.10);
+      padding: 28px 22px;
       text-align: center;
       opacity: 0;
       transform: scale(0.94) translateY(12px);
       will-change: opacity, transform;
+      margin: 0 auto;
     }
 
-    /* Login card – smaller & animated entrance */
     #auth-container {
       max-width: 380px;
       transition: var(--transition-slow);
@@ -91,11 +93,11 @@
       to   { opacity: 1; transform: scale(1) translateY(0); }
     }
 
-    /* Dashboard entrance */
     #dashboard-container.dashboard-visible {
       opacity: 1;
       transform: scale(1) translateY(0);
       animation: dashboardAppear 0.68s cubic-bezier(0.23, 1, 0.32, 1) 0.1s forwards;
+      max-width: 540px;
     }
 
     @keyframes dashboardAppear {
@@ -103,85 +105,84 @@
       to   { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    h1 { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.6px; margin-bottom: 6px; }
-    h2 { font-size: 1.45rem; font-weight: 600; margin: 28px 0 16px; }
+    /* ────────────────────────────────────────────────
+       Left-align auth card on desktop/tablet
+       Keep centered on mobile (< 768px)
+    ───────────────────────────────────────────────── */
+    @media (min-width: 768px) {
+      body:has(#auth-container.auth-visible) {
+        justify-content: flex-start;
+        padding-left: 6vw;                    /* ← controls distance from left edge */
+      }
+
+      #auth-container {
+        margin-left: 0;
+        margin-right: auto;
+      }
+    }
+
+    @media (min-width: 1400px) {
+      body:has(#auth-container.auth-visible) {
+        padding-left: 120px;                  /* cap on ultra-wide screens */
+      }
+    }
+
+    h1 { font-size: 2.05rem; margin-bottom: 4px; }
+    h2 { font-size: 1.4rem; margin: 20px 0 12px; }
 
     input, select {
-      width: 100%;
-      padding: 13px 16px;
-      margin: 10px 0;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      font-size: 0.96rem;
-      background: var(--input-bg);
-      color: var(--text);
-      transition: var(--transition-fast);
-      will-change: border-color, box-shadow;
+      padding: 11px 14px;
+      margin: 8px 0;
+      border-radius: 12px;
+      font-size: 0.94rem;
     }
 
-    input:focus, select:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--glow);
+    .auth-options {
+      gap: 10px;
+      margin: 16px 0 12px;
     }
 
+    .divider {
+      margin: 12px 0;
+      font-size: 0.86rem;
+    }
+
+    .btn-wrapper button,
     button {
-      width: 100%;
-      padding: 13px 24px;
-      margin: 10px 0;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 9999px;
-      font-size: 0.98rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition-fast);
-      will-change: transform, background, box-shadow;
-    }
-
-    button:hover {
-      background: var(--accent-hover);
-      transform: scale(1.03) translateY(-1px);
-      box-shadow: 0 10px 24px var(--glow);
-    }
-
-    button:active {
-      transform: scale(0.97);
-      transition: transform 0.11s ease-out;
-    }
-
-    button.secondary {
-      background: transparent;
-      color: var(--accent);
-      border: 1px solid var(--accent);
-    }
-
-    button.secondary:hover {
-      background: rgba(0,0,0,0.05);
-      transform: scale(1.03);
+      padding: 11px 20px;
+      margin: 8px 0;
+      font-size: 0.96rem;
     }
 
     button.google-btn {
-      background: white;
-      color: #111;
-      border: 1px solid #ddd;
+      padding: 11px;
+      font-size: 0.94rem;
+    }
+
+    button {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      font-weight: 500;
-      font-size: 0.96rem;
+      gap: 8px;
     }
 
-    [data-theme="dark"] button.google-btn {
-      background: #ffffff;
-      color: #111;
-      border-color: #444;
+    button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
     }
 
-    button.google-btn img {
+    .spinner {
+      width: 18px;
       height: 18px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top: 3px solid var(--spinner);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     .workout-log {
@@ -201,9 +202,6 @@
       opacity: 1;
       transform: translateY(0);
     }
-
-    .workout-log h3 { font-size: 1.12rem; margin-bottom: 6px; }
-    .workout-log p { color: var(--text-muted); font-size: 0.92rem; margin: 3px 0; }
 
     #stats {
       font-size: 1.1rem;
@@ -229,7 +227,6 @@
       padding: 8px;
       border-radius: 50%;
       transition: var(--transition-bounce);
-      will-change: transform;
     }
 
     #theme-toggle:hover {
@@ -270,7 +267,9 @@
 
 <div class="container" id="auth-container">
   <h1>GymFlow</h1>
-  <p style="color:var(--muted); margin:6px 0 24px; font-size:0.95rem;">Minimal. Futuristic. Progress.</p>
+  <p style="color:var(--muted); margin:4px 0 16px; font-size:0.92rem;">
+    Minimal. Futuristic. Progress.
+  </p>
 
   <div class="auth-options">
     <button class="google-btn" id="googleSignIn">
@@ -287,7 +286,10 @@
     <input type="email"    id="email"    placeholder="Email"    required />
     <input type="password" id="password" placeholder="Password" required />
     
-    <button id="main-btn">Sign In</button>
+    <div class="btn-wrapper">
+      <button id="main-btn">Sign In</button>
+    </div>
+    
     <button id="toggle-btn" class="secondary">Create account</button>
   </div>
   
@@ -412,22 +414,43 @@ toggleBtn.onclick = () => {
 };
 
 // ────────────────────────────────────────────────
-// Google Sign-In
+// Loading state helpers
+// ────────────────────────────────────────────────
+function setLoading(button, isLoading) {
+  if (isLoading) {
+    button.disabled = true;
+    button.innerHTML = `<span class="spinner"></span> Loading...`;
+  } else {
+    button.disabled = false;
+    if (button.id === 'main-btn') {
+      button.textContent = isLogin ? 'Sign In' : 'Sign Up';
+    } else if (button.id === 'googleSignIn') {
+      button.innerHTML = `<img src="https://www.google.com/favicon.ico" alt="Google"> Continue with Google`;
+    }
+  }
+}
+
+// ────────────────────────────────────────────────
+// Google Sign-In with loading
 // ────────────────────────────────────────────────
 googleBtn.onclick = async () => {
+  setLoading(googleBtn, true);
+  authMessage.textContent = '';
+
   try {
-    authMessage.textContent = '';
     await signInWithPopup(auth, googleProvider);
   } catch (error) {
     let msg = 'Google sign-in failed';
     if (error.code === 'auth/popup-closed-by-user') msg = 'Popup closed';
     if (error.code === 'auth/popup-blocked') msg = 'Popup blocked';
     authMessage.textContent = msg;
+  } finally {
+    setLoading(googleBtn, false);
   }
 };
 
 // ────────────────────────────────────────────────
-// Email/Password Auth
+// Email/Password Auth with loading
 // ────────────────────────────────────────────────
 mainBtn.onclick = async () => {
   const email = emailEl.value.trim();
@@ -438,6 +461,8 @@ mainBtn.onclick = async () => {
     authMessage.textContent = 'Fill email and password';
     return;
   }
+
+  setLoading(mainBtn, true);
 
   try {
     if (isLogin) {
@@ -451,6 +476,8 @@ mainBtn.onclick = async () => {
       err.code?.includes('user-not-found') ? 'No account' :
       err.code?.includes('email-already-in-use') ? 'Email in use' :
       err.message || 'Auth error';
+  } finally {
+    setLoading(mainBtn, false);
   }
 };
 
@@ -459,13 +486,11 @@ mainBtn.onclick = async () => {
 // ────────────────────────────────────────────────
 onAuthStateChanged(auth, user => {
   if (user) {
-    // Hide login smoothly
     authContainer.classList.remove('auth-visible');
     setTimeout(() => {
       authContainer.style.display = 'none';
     }, 620);
 
-    // Show dashboard smoothly
     dashboardContainer.style.display = 'block';
     setTimeout(() => {
       dashboardContainer.classList.add('dashboard-visible');
@@ -509,20 +534,15 @@ onAuthStateChanged(auth, user => {
         `;
         workoutsEl.appendChild(div);
 
-        // Staggered smooth reveal
-        setTimeout(() => {
-          div.classList.add('visible');
-        }, 120 + index * 100);
+        setTimeout(() => div.classList.add('visible'), 120 + index * 100);
       });
     });
   } else {
-    // Hide dashboard
     dashboardContainer.classList.remove('dashboard-visible');
     setTimeout(() => {
       dashboardContainer.style.display = 'none';
     }, 680);
 
-    // Show login
     authContainer.style.display = 'block';
     setTimeout(() => {
       authContainer.classList.add('auth-visible');
@@ -572,7 +592,9 @@ logBtn.onclick = async () => {
   }
 };
 
+// ────────────────────────────────────────────────
 // Logout
+// ────────────────────────────────────────────────
 logoutBtn.onclick = () => signOut(auth);
 </script>
 </body>
