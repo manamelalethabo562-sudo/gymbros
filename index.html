@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GymFlow — Login</title>
+  <script type="module" src="firebase.js" defer></script>
+  <script type="module" src="app.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <h1>GymFlow</h1>
+    <p style="color:#64748b; margin:8px 0 32px;">Minimal. Futuristic. Your progress.</p>
+
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    
+    <button id="main-btn">Sign In</button>
+    <button id="toggle-btn" class="secondary">Create account</button>
+    
+    <p id="message" style="margin-top:16px; min-height:20px; color:#ef4444;"></p>
+  </div>
+</body>
+</html>
