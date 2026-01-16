@@ -8,31 +8,33 @@
   <style>
     :root {
       --bg: #f8fafc;
-      --card: rgba(255, 255, 255, 0.92);
+      --card: rgba(255, 255, 255, 0.94);
       --text: #0f172a;
       --text-muted: #475569;
-      --accent: #6366f1;
-      --accent-dark: #4f46e5;
-      --border: rgba(15, 23, 42, 0.08);
-      --glow: rgba(99, 102, 241, 0.12);
-      --input-bg: rgba(255,255,255,0.7);
+      --accent: #000000;           /* black buttons */
+      --accent-hover: #1a1a1a;
+      --accent-dark: #000000;
+      --border: rgba(15, 23, 42, 0.1);
+      --glow: rgba(0, 0, 0, 0.12);
+      --input-bg: rgba(255,255,255,0.75);
       --surface: #ffffff;
       --muted: #64748b;
       --success: #10b981;
       --error: #ef4444;
-      --transition: all 0.3s ease;
+      --transition: all 0.28s ease;
     }
 
     [data-theme="dark"] {
       --bg: #0f172a;
-      --card: rgba(30, 41, 59, 0.92);
+      --card: rgba(30, 41, 59, 0.94);
       --text: #e2e8f0;
       --text-muted: #94a3b8;
-      --accent: #818cf8;
-      --accent-dark: #6366f1;
-      --border: rgba(226, 232, 240, 0.12);
-      --glow: rgba(129, 140, 248, 0.18);
-      --input-bg: rgba(30, 41, 59, 0.7);
+      --accent: #000000;
+      --accent-hover: #1a1a1a;
+      --accent-dark: #000000;
+      --border: rgba(226, 232, 240, 0.14);
+      --glow: rgba(0, 0, 0, 0.24);
+      --input-bg: rgba(30, 41, 59, 0.75);
       --surface: #1e293b;
       --muted: #94a3b8;
       --success: #34d399;
@@ -42,10 +44,10 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background: linear-gradient(135deg, var(--bg) 0%, #e0f2fe 100%);
+      background: linear-gradient(135deg, var(--bg), #e0f2fe);
       color: var(--text);
       min-height: 100vh;
-      padding: 20px;
+      padding: 24px 16px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -53,7 +55,7 @@
     }
 
     [data-theme="dark"] body {
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      background: linear-gradient(135deg, #0f172a, #1e293b);
     }
 
     .container {
@@ -61,38 +63,74 @@
       max-width: 520px;
       background: var(--card);
       backdrop-filter: blur(16px);
-      border-radius: 24px;
+      border-radius: 28px;
       border: 1px solid var(--border);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.08), 0 0 0 1px rgba(99,102,241,0.06);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
       padding: 40px 28px;
       text-align: center;
       transition: var(--transition);
     }
 
-    h1 { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.6px; margin-bottom: 8px; }
-    h2 { font-size: 1.55rem; font-weight: 600; margin: 32px 0 16px; }
+    h1 { font-size: 2.5rem; font-weight: 700; letter-spacing: -0.7px; margin-bottom: 8px; }
+    h2 { font-size: 1.6rem; font-weight: 600; margin: 32px 0 20px; }
 
-    input, select, button.google-btn {
+    input, select {
       width: 100%;
-      padding: 14px 16px;
+      padding: 14px 18px;
       margin: 10px 0;
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 16px;
       font-size: 1rem;
       background: var(--input-bg);
       color: var(--text);
       transition: var(--transition);
     }
 
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--glow);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px 24px;
+      margin: 12px 0;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 9999px;           /* pill shape */
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    button:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1.5px);
+      box-shadow: 0 10px 24px var(--glow);
+    }
+
+    button.secondary {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    button.secondary:hover {
+      background: rgba(0,0,0,0.06);
+    }
+
     button.google-btn {
-      background: #ffffff;
-      color: #333;
-      font-weight: 500;
+      background: white;
+      color: #111;
+      border: 1px solid #ddd;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
-      border: 1px solid #ddd;
+      font-weight: 500;
     }
 
     [data-theme="dark"] button.google-btn {
@@ -105,68 +143,33 @@
       height: 20px;
     }
 
-    input:focus, select:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--glow);
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      margin: 12px 0;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    button:hover {
-      background: var(--accent-dark);
-      transform: translateY(-1px);
-      box-shadow: 0 8px 20px var(--glow);
-    }
-
-    button.secondary {
-      background: transparent;
-      color: var(--accent);
-      border: 1px solid var(--accent);
-    }
-
-    button.secondary:hover {
-      background: rgba(99,102,241,0.1);
-    }
-
     .section { display: none; }
     .active { display: block; }
 
     .workout-log {
       background: var(--surface);
-      border-radius: 16px;
-      padding: 16px;
+      border-radius: 20px;
+      padding: 18px;
       margin: 16px 0;
       border: 1px solid var(--border);
       text-align: left;
       transition: var(--transition);
     }
 
-    .workout-log h3 { font-size: 1.15rem; margin-bottom: 8px; }
-    .workout-log p { color: var(--text-muted); font-size: 0.95rem; margin: 4px 0; }
+    .workout-log h3 { font-size: 1.18rem; margin-bottom: 8px; }
+    .workout-log p { color: var(--text-muted); font-size: 0.97rem; margin: 4px 0; }
 
     #stats {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 600;
       color: var(--accent);
-      margin: 24px 0;
+      margin: 28px 0;
     }
 
-    #message, .message {
-      min-height: 20px;
+    .message {
+      min-height: 22px;
       margin: 12px 0;
+      font-size: 0.96rem;
     }
 
     .error { color: var(--error); }
@@ -175,7 +178,7 @@
     #theme-toggle {
       background: none;
       border: none;
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       cursor: pointer;
       padding: 8px;
       border-radius: 50%;
@@ -183,21 +186,35 @@
     }
 
     #theme-toggle:hover {
-      background: rgba(99,102,241,0.1);
+      background: rgba(0,0,0,0.08);
     }
 
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
     }
 
     .auth-options {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin: 24px 0;
+      gap: 16px;
+      margin: 28px 0 20px;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 20px 0;
+      color: var(--muted);
+    }
+
+    .divider hr {
+      flex: 1;
+      border: none;
+      border-top: 1px solid var(--border);
     }
   </style>
 </head>
@@ -210,13 +227,13 @@
   <div class="auth-options">
     <button class="google-btn" id="googleSignIn">
       <img src="https://www.google.com/favicon.ico" alt="Google">
-      Sign in with Google
+      Continue with Google
     </button>
 
-    <div style="display:flex; align-items:center; gap:16px; margin:16px 0;">
-      <hr style="flex:1; border-color:var(--border);">
-      <span style="color:var(--muted);">or</span>
-      <hr style="flex:1; border-color:var(--border);">
+    <div class="divider">
+      <hr>
+      <span>or</span>
+      <hr>
     </div>
 
     <input type="email"    id="email"    placeholder="Email"    required />
@@ -226,15 +243,15 @@
     <button id="toggle-btn" class="secondary">Create account</button>
   </div>
   
-  <p id="auth-message" class="error"></p>
+  <p id="auth-message" class="error message"></p>
 </div>
 
 <div class="container section" id="dashboard-container">
   <div class="header">
     <h1>GymFlow</h1>
-    <div style="display:flex; align-items:center; gap:12px;">
-      <button id="theme-toggle" title="Toggle dark mode">🌙</button>
-      <button id="logout" class="secondary" style="width:auto; padding:10px 18px;">Logout</button>
+    <div style="display:flex; align-items:center; gap:16px;">
+      <button id="theme-toggle" title="Toggle theme">🌙</button>
+      <button id="logout" class="secondary" style="width:auto; padding:10px 20px;">Logout</button>
     </div>
   </div>
 
@@ -266,9 +283,7 @@
 </div>
 
 <script type="module">
-// ────────────────────────────────────────────────
-// Firebase Imports (modular SDK)
-// ────────────────────────────────────────────────
+// Firebase Imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { 
   getAuth, 
@@ -300,9 +315,7 @@ const db   = getDatabase(app);
 
 const googleProvider = new GoogleAuthProvider();
 
-// ────────────────────────────────────────────────
-// DOM Elements
-// ────────────────────────────────────────────────
+// DOM
 const 
   authContainer    = document.getElementById('auth-container'),
   dashboardContainer = document.getElementById('dashboard-container'),
@@ -324,9 +337,7 @@ const
   logoutBtn        = document.getElementById('logout'),
   themeToggle      = document.getElementById('theme-toggle');
 
-// ────────────────────────────────────────────────
 // Dark Mode
-// ────────────────────────────────────────────────
 function setTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('theme', theme);
@@ -342,46 +353,33 @@ themeToggle.onclick = () => {
   setTheme(current === 'light' ? 'dark' : 'light');
 };
 
-// ────────────────────────────────────────────────
-// Auth UI Toggle (Email/Password)
-// ────────────────────────────────────────────────
+// Auth toggle
 let isLogin = true;
-
 toggleBtn.onclick = () => {
   isLogin = !isLogin;
   mainBtn.textContent = isLogin ? 'Sign In' : 'Sign Up';
   toggleBtn.textContent = isLogin ? 'Create account' : 'Already have an account? Sign in';
 };
 
-// ────────────────────────────────────────────────
-// Google Sign-In with Popup
-// ────────────────────────────────────────────────
+// Google Sign In
 googleBtn.onclick = async () => {
   try {
     authMessage.textContent = '';
-    const result = await signInWithPopup(auth, googleProvider);
-    // User is signed in → onAuthStateChanged will handle UI switch
+    await signInWithPopup(auth, googleProvider);
   } catch (error) {
     let msg = 'Google sign-in failed';
-    if (error.code === 'auth/popup-closed-by-user') {
-      msg = 'Sign-in popup was closed';
-    } else if (error.code === 'auth/popup-blocked') {
-      msg = 'Popup blocked — please allow popups for this site';
-    }
+    if (error.code === 'auth/popup-closed-by-user') msg = 'Popup closed';
+    if (error.code === 'auth/popup-blocked') msg = 'Popup blocked — allow popups';
     authMessage.textContent = msg;
-    authMessage.className = 'error';
     console.error(error);
   }
 };
 
-// ────────────────────────────────────────────────
-// Email/Password Auth
-// ────────────────────────────────────────────────
+// Email/Password
 mainBtn.onclick = async () => {
   const email = emailEl.value.trim();
   const pass  = passwordEl.value;
   authMessage.textContent = '';
-  authMessage.className = 'error';
 
   if (!email || !pass) {
     authMessage.textContent = 'Please fill email and password';
@@ -403,12 +401,11 @@ mainBtn.onclick = async () => {
   }
 };
 
-// ────────────────────────────────────────────────
-// Auth State Listener + Real-time Workouts
-// ────────────────────────────────────────────────
+// Auth state → hide login completely after login
 onAuthStateChanged(auth, user => {
   if (user) {
-    authContainer.classList.remove('active');
+    authContainer.style.display = 'none';           // fully hide login
+    dashboardContainer.style.display = 'block';
     dashboardContainer.classList.add('active');
 
     const today = new Date().toISOString().split('T')[0];
@@ -451,15 +448,13 @@ onAuthStateChanged(auth, user => {
       });
     });
   } else {
-    dashboardContainer.classList.remove('active');
-    authContainer.classList.add('active');
+    authContainer.style.display = 'block';
+    dashboardContainer.style.display = 'none';
     authMessage.textContent = '';
   }
 });
 
-// ────────────────────────────────────────────────
-// Log Workout
-// ────────────────────────────────────────────────
+// Log workout
 logBtn.onclick = async () => {
   const user = auth.currentUser;
   if (!user) return;
@@ -490,11 +485,11 @@ logBtn.onclick = async () => {
       timestamp: serverTimestamp()
     });
 
-    logMessage.textContent = 'Workout logged successfully';
+    logMessage.textContent = 'Logged successfully';
     logMessage.className = 'success';
 
     exerciseEl.value = setsEl.value = repsEl.value = weightEl.value = notesEl.value = '';
-    setTimeout(() => { logMessage.textContent = ''; logMessage.className = ''; }, 3000);
+    setTimeout(() => { logMessage.textContent = ''; logMessage.className = ''; }, 2800);
   } catch (err) {
     logMessage.textContent = 'Error logging workout';
     logMessage.className = 'error';
