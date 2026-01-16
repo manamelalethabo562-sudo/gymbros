@@ -106,13 +106,13 @@
     }
 
     /* ────────────────────────────────────────────────
-       Left-align auth card on desktop/tablet
-       Keep centered on mobile (< 768px)
+       Left-align auth card on desktop/tablet (≥768px)
+       Keep centered on mobile (<768px)
     ───────────────────────────────────────────────── */
     @media (min-width: 768px) {
       body:has(#auth-container.auth-visible) {
         justify-content: flex-start;
-        padding-left: 6vw;                    /* ← controls distance from left edge */
+        padding-left: 6vw;
       }
 
       #auth-container {
@@ -123,7 +123,7 @@
 
     @media (min-width: 1400px) {
       body:has(#auth-container.auth-visible) {
-        padding-left: 120px;                  /* cap on ultra-wide screens */
+        padding-left: 120px;
       }
     }
 
@@ -131,39 +131,55 @@
     h2 { font-size: 1.4rem; margin: 20px 0 12px; }
 
     input, select {
+      width: 100%;
       padding: 11px 14px;
       margin: 8px 0;
+      border: 1px solid var(--border);
       border-radius: 12px;
       font-size: 0.94rem;
+      background: var(--input-bg);
+      color: var(--text);
+      transition: var(--transition-fast);
     }
 
-    .auth-options {
-      gap: 10px;
-      margin: 16px 0 12px;
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--glow);
     }
 
-    .divider {
-      margin: 12px 0;
-      font-size: 0.86rem;
+    .btn-wrapper {
+      position: relative;
+      width: 100%;
     }
 
-    .btn-wrapper button,
     button {
+      width: 100%;
       padding: 11px 20px;
       margin: 8px 0;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 9999px;
       font-size: 0.96rem;
-    }
-
-    button.google-btn {
-      padding: 11px;
-      font-size: 0.94rem;
-    }
-
-    button {
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-fast);
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+    }
+
+    button:hover:not(:disabled) {
+      background: var(--accent-hover);
+      transform: scale(1.03) translateY(-1px);
+      box-shadow: 0 10px 24px var(--glow);
+    }
+
+    button:active {
+      transform: scale(0.97);
+      transition: transform 0.11s ease-out;
     }
 
     button:disabled {
@@ -185,6 +201,35 @@
       100% { transform: rotate(360deg); }
     }
 
+    button.secondary {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    button.secondary:hover:not(:disabled) {
+      background: rgba(0,0,0,0.05);
+      transform: scale(1.03);
+    }
+
+    button.google-btn {
+      background: white;
+      color: #111;
+      border: 1px solid #ddd;
+      font-weight: 500;
+      font-size: 0.94rem;
+    }
+
+    [data-theme="dark"] button.google-btn {
+      background: #ffffff;
+      color: #111;
+      border-color: #444;
+    }
+
+    button.google-btn img {
+      height: 18px;
+    }
+
     .workout-log {
       background: var(--surface);
       border-radius: 18px;
@@ -202,6 +247,9 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    .workout-log h3 { font-size: 1.12rem; margin-bottom: 6px; }
+    .workout-log p { color: var(--text-muted); font-size: 0.92rem; margin: 3px 0; }
 
     #stats {
       font-size: 1.1rem;
