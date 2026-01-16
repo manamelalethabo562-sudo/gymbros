@@ -8,15 +8,15 @@
   <style>
     :root {
       --bg: #f8fafc;
-      --card: rgba(255, 255, 255, 0.96);
+      --card: rgba(255, 255, 255, 0.88);
       --text: #0f172a;
       --text-muted: #475569;
       --accent: #000000;
       --accent-hover: #222222;
-      --border: rgba(15, 23, 42, 0.10);
-      --glow: rgba(0, 0, 0, 0.14);
-      --input-bg: rgba(255,255,255,0.80);
-      --surface: #ffffff;
+      --border: rgba(15, 23, 42, 0.14);
+      --glow: rgba(0, 0, 0, 0.18);
+      --input-bg: rgba(255,255,255,0.82);
+      --surface: rgba(255,255,255,0.92);
       --muted: #64748b;
       --success: #10b981;
       --error: #ef4444;
@@ -30,15 +30,15 @@
 
     [data-theme="dark"] {
       --bg: #0f172a;
-      --card: rgba(30, 41, 59, 0.96);
+      --card: rgba(30, 41, 59, 0.88);
       --text: #e2e8f0;
       --text-muted: #94a3b8;
       --accent: #000000;
       --accent-hover: #222222;
-      --border: rgba(226, 232, 240, 0.16);
-      --glow: rgba(0, 0, 0, 0.28);
-      --input-bg: rgba(30, 41, 59, 0.80);
-      --surface: #1e293b;
+      --border: rgba(226, 232, 240, 0.22);
+      --glow: rgba(0, 0, 0, 0.34);
+      --input-bg: rgba(30, 41, 59, 0.82);
+      --surface: rgba(30, 41, 59, 0.92);
       --muted: #94a3b8;
       --success: #34d399;
       --error: #f87171;
@@ -46,40 +46,37 @@
     }
 
     * { margin:0; padding:0; box-sizing:border-box; }
+
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background: linear-gradient(135deg, var(--bg), #e0f2fe);
-      color: var(--text);
       min-height: 100vh;
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.9s ease;
-    }
-
-    [data-theme="dark"] body {
-      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: var(--text);
+      background: linear-gradient(rgba(0,0,0,0.38), rgba(0,0,0,0.42)),
+                  url('https://i.postimg.cc/htjDK97D/Gemini-Generated-Image-nbl0t7nbl0t7nbl0.png') center / cover no-repeat fixed;
+      background-attachment: fixed;
+      transition: color 0.6s ease;
     }
 
     .container {
       width: 100%;
+      max-width: 420px;
       background: var(--card);
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-radius: 28px;
       border: 1px solid var(--border);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.10);
-      padding: 28px 22px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.22);
+      padding: 26px 20px;
       text-align: center;
       opacity: 0;
       transform: scale(0.94) translateY(12px);
       will-change: opacity, transform;
       margin: 0 auto;
+      transition: var(--transition-medium);
     }
 
     #auth-container {
       max-width: 380px;
-      transition: var(--transition-slow);
     }
 
     #auth-container.auth-visible {
@@ -105,10 +102,7 @@
       to   { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* ────────────────────────────────────────────────
-       Left-align auth card on desktop/tablet (≥768px)
-       Keep centered on mobile (<768px)
-    ───────────────────────────────────────────────── */
+    /* Left-align auth card on desktop/tablet */
     @media (min-width: 768px) {
       body:has(#auth-container.auth-visible) {
         justify-content: flex-start;
@@ -127,8 +121,8 @@
       }
     }
 
-    h1 { font-size: 2.05rem; margin-bottom: 4px; }
-    h2 { font-size: 1.4rem; margin: 20px 0 12px; }
+    h1 { font-size: 2.05rem; margin-bottom: 4px; font-weight: 700; }
+    h2 { font-size: 1.4rem; margin: 20px 0 12px; font-weight: 600; }
 
     input, select {
       width: 100%;
@@ -179,7 +173,6 @@
 
     button:active {
       transform: scale(0.97);
-      transition: transform 0.11s ease-out;
     }
 
     button:disabled {
@@ -221,7 +214,7 @@
     }
 
     [data-theme="dark"] button.google-btn {
-      background: #ffffff;
+      background: white;
       color: #111;
       border-color: #444;
     }
@@ -247,9 +240,6 @@
       opacity: 1;
       transform: translateY(0);
     }
-
-    .workout-log h3 { font-size: 1.12rem; margin-bottom: 6px; }
-    .workout-log p { color: var(--text-muted); font-size: 0.92rem; margin: 3px 0; }
 
     #stats {
       font-size: 1.1rem;
@@ -287,28 +277,6 @@
       align-items: center;
       margin-bottom: 24px;
     }
-
-    .auth-options {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin: 24px 0 16px;
-    }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin: 18px 0;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .divider hr {
-      flex: 1;
-      border: none;
-      border-top: 1px solid var(--border);
-    }
   </style>
 </head>
 <body>
@@ -331,7 +299,7 @@
       <hr>
     </div>
 
-    <input type="email"    id="email"    placeholder="Email"    required />
+    <input type="email" id="email" placeholder="Email" required />
     <input type="password" id="password" placeholder="Password" required />
     
     <div class="btn-wrapper">
@@ -366,10 +334,10 @@
     <option value="Other">Other</option>
   </select>
 
-  <input type="number" id="sets"   placeholder="Sets" min="1" />
-  <input type="number" id="reps"   placeholder="Reps" min="1" />
+  <input type="number" id="sets" placeholder="Sets" min="1" />
+  <input type="number" id="reps" placeholder="Reps" min="1" />
   <input type="number" id="weight" placeholder="Weight (kg)" min="0" step="0.5" />
-  <input type="text"   id="notes"  placeholder="Notes (optional)" />
+  <input type="text" id="notes" placeholder="Notes (optional)" />
 
   <button id="logBtn">Log Set</button>
   <p id="log-message" class="message"></p>
@@ -409,9 +377,7 @@ const auth = getAuth(app);
 const db   = getDatabase(app);
 const googleProvider = new GoogleAuthProvider();
 
-// ────────────────────────────────────────────────
 // DOM Elements
-// ────────────────────────────────────────────────
 const 
   authContainer    = document.getElementById('auth-container'),
   dashboardContainer = document.getElementById('dashboard-container'),
@@ -433,9 +399,7 @@ const
   logoutBtn        = document.getElementById('logout'),
   themeToggle      = document.getElementById('theme-toggle');
 
-// ────────────────────────────────────────────────
 // Dark Mode
-// ────────────────────────────────────────────────
 function setTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('theme', theme);
@@ -451,9 +415,7 @@ themeToggle.onclick = () => {
   setTheme(current === 'light' ? 'dark' : 'light');
 };
 
-// ────────────────────────────────────────────────
 // Auth UI Toggle
-// ────────────────────────────────────────────────
 let isLogin = true;
 toggleBtn.onclick = () => {
   isLogin = !isLogin;
@@ -461,9 +423,7 @@ toggleBtn.onclick = () => {
   toggleBtn.textContent = isLogin ? 'Create account' : 'Already have an account? Sign in';
 };
 
-// ────────────────────────────────────────────────
 // Loading state helpers
-// ────────────────────────────────────────────────
 function setLoading(button, isLoading) {
   if (isLoading) {
     button.disabled = true;
@@ -478,9 +438,7 @@ function setLoading(button, isLoading) {
   }
 }
 
-// ────────────────────────────────────────────────
-// Google Sign-In with loading
-// ────────────────────────────────────────────────
+// Google Sign-In
 googleBtn.onclick = async () => {
   setLoading(googleBtn, true);
   authMessage.textContent = '';
@@ -497,9 +455,7 @@ googleBtn.onclick = async () => {
   }
 };
 
-// ────────────────────────────────────────────────
-// Email/Password Auth with loading
-// ────────────────────────────────────────────────
+// Email/Password Auth
 mainBtn.onclick = async () => {
   const email = emailEl.value.trim();
   const pass  = passwordEl.value;
@@ -529,20 +485,14 @@ mainBtn.onclick = async () => {
   }
 };
 
-// ────────────────────────────────────────────────
-// Auth State + Smooth Animations
-// ────────────────────────────────────────────────
+// Auth State + Animations
 onAuthStateChanged(auth, user => {
   if (user) {
     authContainer.classList.remove('auth-visible');
-    setTimeout(() => {
-      authContainer.style.display = 'none';
-    }, 620);
+    setTimeout(() => { authContainer.style.display = 'none'; }, 620);
 
     dashboardContainer.style.display = 'block';
-    setTimeout(() => {
-      dashboardContainer.classList.add('dashboard-visible');
-    }, 80);
+    setTimeout(() => { dashboardContainer.classList.add('dashboard-visible'); }, 80);
 
     const today = new Date().toISOString().split('T')[0];
     const workoutsRef = ref(db, `users/${user.uid}/workouts`);
@@ -587,22 +537,16 @@ onAuthStateChanged(auth, user => {
     });
   } else {
     dashboardContainer.classList.remove('dashboard-visible');
-    setTimeout(() => {
-      dashboardContainer.style.display = 'none';
-    }, 680);
+    setTimeout(() => { dashboardContainer.style.display = 'none'; }, 680);
 
     authContainer.style.display = 'block';
-    setTimeout(() => {
-      authContainer.classList.add('auth-visible');
-    }, 80);
+    setTimeout(() => { authContainer.classList.add('auth-visible'); }, 80);
 
     authMessage.textContent = '';
   }
 });
 
-// ────────────────────────────────────────────────
 // Log Workout
-// ────────────────────────────────────────────────
 logBtn.onclick = async () => {
   const user = auth.currentUser;
   if (!user) return;
@@ -640,9 +584,7 @@ logBtn.onclick = async () => {
   }
 };
 
-// ────────────────────────────────────────────────
 // Logout
-// ────────────────────────────────────────────────
 logoutBtn.onclick = () => signOut(auth);
 </script>
 </body>
