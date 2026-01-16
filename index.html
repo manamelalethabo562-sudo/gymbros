@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GymBros — Minimal Futuristic Tracker</title>
+  <title>GymFlow — Minimal Futuristic Tracker</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <style>
     :root {
@@ -15,18 +15,45 @@
       --accent-dark: #4f46e5;
       --border: rgba(15, 23, 42, 0.08);
       --glow: rgba(99, 102, 241, 0.12);
+      --input-bg: rgba(255,255,255,0.7);
+      --surface: #ffffff;
+      --muted: #64748b;
+      --success: #10b981;
+      --error: #ef4444;
+      --transition: all 0.3s ease;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --card: rgba(30, 41, 59, 0.92);
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --accent: #818cf8;
+      --accent-dark: #6366f1;
+      --border: rgba(226, 232, 240, 0.12);
+      --glow: rgba(129, 140, 248, 0.18);
+      --input-bg: rgba(30, 41, 59, 0.7);
+      --surface: #1e293b;
+      --muted: #94a3b8;
+      --success: #34d399;
+      --error: #f87171;
     }
 
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+      background: linear-gradient(135deg, var(--bg) 0%, #e0f2fe 100%);
       color: var(--text);
       min-height: 100vh;
       padding: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: var(--transition);
+    }
+
+    [data-theme="dark"] body {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     }
 
     .container {
@@ -36,24 +63,46 @@
       backdrop-filter: blur(16px);
       border-radius: 24px;
       border: 1px solid var(--border);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.06), 0 0 0 1px rgba(99,102,241,0.05);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.08), 0 0 0 1px rgba(99,102,241,0.06);
       padding: 40px 28px;
       text-align: center;
-      transition: all 0.3s;
+      transition: var(--transition);
     }
 
     h1 { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.6px; margin-bottom: 8px; }
     h2 { font-size: 1.55rem; font-weight: 600; margin: 32px 0 16px; }
 
-    input, select {
+    input, select, button.google-btn {
       width: 100%;
       padding: 14px 16px;
       margin: 10px 0;
       border: 1px solid var(--border);
       border-radius: 12px;
       font-size: 1rem;
-      background: rgba(255,255,255,0.7);
-      transition: all 0.2s;
+      background: var(--input-bg);
+      color: var(--text);
+      transition: var(--transition);
+    }
+
+    button.google-btn {
+      background: #ffffff;
+      color: #333;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border: 1px solid #ddd;
+    }
+
+    [data-theme="dark"] button.google-btn {
+      background: #ffffff;
+      color: #111;
+      border-color: #444;
+    }
+
+    button.google-btn img {
+      height: 20px;
     }
 
     input:focus, select:focus {
@@ -73,10 +122,14 @@
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.22s;
+      transition: var(--transition);
     }
 
-    button:hover { background: var(--accent-dark); transform: translateY(-1px); box-shadow: 0 8px 20px var(--glow); }
+    button:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px var(--glow);
+    }
 
     button.secondary {
       background: transparent;
@@ -84,50 +137,105 @@
       border: 1px solid var(--accent);
     }
 
-    button.secondary:hover { background: rgba(99,102,241,0.07); }
+    button.secondary:hover {
+      background: rgba(99,102,241,0.1);
+    }
 
     .section { display: none; }
     .active { display: block; }
 
     .workout-log {
-      background: rgba(255,255,255,0.5);
+      background: var(--surface);
       border-radius: 16px;
       padding: 16px;
       margin: 16px 0;
       border: 1px solid var(--border);
       text-align: left;
+      transition: var(--transition);
     }
 
     .workout-log h3 { font-size: 1.15rem; margin-bottom: 8px; }
     .workout-log p { color: var(--text-muted); font-size: 0.95rem; margin: 4px 0; }
 
-    #stats { font-size: 1.1rem; font-weight: 600; color: var(--accent); margin: 24px 0; }
+    #stats {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin: 24px 0;
+    }
 
-    #message { min-height: 20px; margin: 12px 0; }
+    #message, .message {
+      min-height: 20px;
+      margin: 12px 0;
+    }
 
-    .error { color: #ef4444; }
-    .success { color: #10b981; }
+    .error { color: var(--error); }
+    .success { color: var(--success); }
+
+    #theme-toggle {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+
+    #theme-toggle:hover {
+      background: rgba(99,102,241,0.1);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .auth-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 24px 0;
+    }
   </style>
 </head>
 <body>
 
 <div class="container" id="auth-container">
-  <h1>GymBros</h1>
-  <p style="color:#64748b; margin:8px 0 32px;">Stronger. Bigger. Your progress.</p>
+  <h1>GymFlow</h1>
+  <p style="color:var(--muted); margin:8px 0 32px;">Minimal. Futuristic. Your progress.</p>
 
-  <input type="email"    id="email"    placeholder="Email"    required />
-  <input type="password" id="password" placeholder="Password" required />
-  
-  <button id="main-btn">Sign In</button>
-  <button id="toggle-btn" class="secondary">Create account</button>
+  <div class="auth-options">
+    <button class="google-btn" id="googleSignIn">
+      <img src="https://www.google.com/favicon.ico" alt="Google">
+      Sign in with Google
+    </button>
+
+    <div style="display:flex; align-items:center; gap:16px; margin:16px 0;">
+      <hr style="flex:1; border-color:var(--border);">
+      <span style="color:var(--muted);">or</span>
+      <hr style="flex:1; border-color:var(--border);">
+    </div>
+
+    <input type="email"    id="email"    placeholder="Email"    required />
+    <input type="password" id="password" placeholder="Password" required />
+    
+    <button id="main-btn">Sign In</button>
+    <button id="toggle-btn" class="secondary">Create account</button>
+  </div>
   
   <p id="auth-message" class="error"></p>
 </div>
 
 <div class="container section" id="dashboard-container">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+  <div class="header">
     <h1>GymFlow</h1>
-    <button id="logout" class="secondary" style="width:auto; padding:10px 18px;">Logout</button>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <button id="theme-toggle" title="Toggle dark mode">🌙</button>
+      <button id="logout" class="secondary" style="width:auto; padding:10px 18px;">Logout</button>
+    </div>
   </div>
 
   <h2>Log Workout</h2>
@@ -159,13 +267,15 @@
 
 <script type="module">
 // ────────────────────────────────────────────────
-// Firebase Config + Imports (v10 modular)
+// Firebase Imports (modular SDK)
 // ────────────────────────────────────────────────
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { 
   getAuth, 
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
+  signInWithPopup,
+  GoogleAuthProvider,
   onAuthStateChanged, 
   signOut 
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -188,6 +298,8 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getDatabase(app);
 
+const googleProvider = new GoogleAuthProvider();
+
 // ────────────────────────────────────────────────
 // DOM Elements
 // ────────────────────────────────────────────────
@@ -198,6 +310,7 @@ const
   passwordEl       = document.getElementById('password'),
   mainBtn          = document.getElementById('main-btn'),
   toggleBtn        = document.getElementById('toggle-btn'),
+  googleBtn        = document.getElementById('googleSignIn'),
   authMessage      = document.getElementById('auth-message'),
   logBtn           = document.getElementById('logBtn'),
   logMessage       = document.getElementById('log-message'),
@@ -208,13 +321,32 @@ const
   notesEl          = document.getElementById('notes'),
   workoutsEl       = document.getElementById('workouts'),
   statsEl          = document.getElementById('stats'),
-  logoutBtn        = document.getElementById('logout');
+  logoutBtn        = document.getElementById('logout'),
+  themeToggle      = document.getElementById('theme-toggle');
 
+// ────────────────────────────────────────────────
+// Dark Mode
+// ────────────────────────────────────────────────
+function setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+  themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+}
+
+const savedTheme = localStorage.getItem('theme') || 
+  (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+setTheme(savedTheme);
+
+themeToggle.onclick = () => {
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
+  setTheme(current === 'light' ? 'dark' : 'light');
+};
+
+// ────────────────────────────────────────────────
+// Auth UI Toggle (Email/Password)
+// ────────────────────────────────────────────────
 let isLogin = true;
 
-// ────────────────────────────────────────────────
-// Auth UI Toggle
-// ────────────────────────────────────────────────
 toggleBtn.onclick = () => {
   isLogin = !isLogin;
   mainBtn.textContent = isLogin ? 'Sign In' : 'Sign Up';
@@ -222,7 +354,28 @@ toggleBtn.onclick = () => {
 };
 
 // ────────────────────────────────────────────────
-// Auth Logic
+// Google Sign-In with Popup
+// ────────────────────────────────────────────────
+googleBtn.onclick = async () => {
+  try {
+    authMessage.textContent = '';
+    const result = await signInWithPopup(auth, googleProvider);
+    // User is signed in → onAuthStateChanged will handle UI switch
+  } catch (error) {
+    let msg = 'Google sign-in failed';
+    if (error.code === 'auth/popup-closed-by-user') {
+      msg = 'Sign-in popup was closed';
+    } else if (error.code === 'auth/popup-blocked') {
+      msg = 'Popup blocked — please allow popups for this site';
+    }
+    authMessage.textContent = msg;
+    authMessage.className = 'error';
+    console.error(error);
+  }
+};
+
+// ────────────────────────────────────────────────
+// Email/Password Auth
 // ────────────────────────────────────────────────
 mainBtn.onclick = async () => {
   const email = emailEl.value.trim();
@@ -241,17 +394,17 @@ mainBtn.onclick = async () => {
     } else {
       await createUserWithEmailAndPassword(auth, email, pass);
     }
-    // onAuthStateChanged will handle redirect
   } catch (err) {
     authMessage.textContent = 
       err.code?.includes('wrong-password') ? 'Incorrect password' :
       err.code?.includes('user-not-found') ? 'No account found' :
+      err.code?.includes('email-already-in-use') ? 'Email already in use' :
       err.message || 'Authentication failed';
   }
 };
 
 // ────────────────────────────────────────────────
-// Route Protection + Real-time Data
+// Auth State Listener + Real-time Workouts
 // ────────────────────────────────────────────────
 onAuthStateChanged(auth, user => {
   if (user) {
@@ -266,7 +419,7 @@ onAuthStateChanged(auth, user => {
       let totalVolume = 0;
 
       if (!snapshot.exists()) {
-        workoutsEl.innerHTML = '<p style="color:#64748b;text-align:center;">No workouts logged yet</p>';
+        workoutsEl.innerHTML = '<p style="color:var(--muted);text-align:center;">No workouts logged yet</p>';
         statsEl.textContent = 'Total volume today: 0 kg';
         return;
       }
@@ -290,7 +443,7 @@ onAuthStateChanged(auth, user => {
         div.innerHTML = `
           <h3>${log.exercise}${log.notes ? ` — ${log.notes}` : ''}</h3>
           <p>Sets: ${log.sets} × Reps: ${log.reps} @ ${log.weight || 0} kg</p>
-          <small style="color:#94a3b8;">
+          <small style="color:var(--muted);">
             ${new Date(log.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}
           </small>
         `;
@@ -340,7 +493,6 @@ logBtn.onclick = async () => {
     logMessage.textContent = 'Workout logged successfully';
     logMessage.className = 'success';
 
-    // Reset form
     exerciseEl.value = setsEl.value = repsEl.value = weightEl.value = notesEl.value = '';
     setTimeout(() => { logMessage.textContent = ''; logMessage.className = ''; }, 3000);
   } catch (err) {
